@@ -27,8 +27,9 @@ for filename in os.listdir('cogs'): # import os in your code and also replace th
     if filename.endswith('.py'):
         bot.load_extension(f'cogs.{filename[:-3]}') # replaces file extension('.py') and loads it
 
+my_secret = os.environ['TOKEN']
+bot.run(my_secret)
 
-bot.run("ODUyNzM2MDMzMTE5NTM1MTY0.YMLKUQ.h2WGyJZCEpJvbtEK_eowFjOa8js")
 
 
     

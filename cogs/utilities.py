@@ -1,6 +1,7 @@
 import discord
 from discord.ext import commands # Again, we need this imported
 import time
+from discord import Member
 
 
 class Utilities(commands.Cog):
@@ -55,6 +56,9 @@ class Utilities(commands.Cog):
 
         stringembed = discord.Embed(title=f"Message from {author}", description=content)
         await ctx.send(embed=stringembed)
+    
+    
+
 
         
 

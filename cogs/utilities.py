@@ -23,6 +23,7 @@ class Utilities(commands.Cog):
 
     @commands.command(name="setstatus")
     @commands.cooldown(rate=1, per=5)
+    @commands.has_role(847994265974997002)
     async def setstatus(self, ctx: commands.Context, *, text: str):
         """Set the bot's status."""
         await self.bot.change_presence(activity=discord.Game(name=text))
@@ -30,6 +31,20 @@ class Utilities(commands.Cog):
         statusreply = discord.Embed(description = "Done!")
 
         await ctx.send(embed=statusreply)
+    @setstatus.error
+    async def setstatus_error(self, ctx: commands.Context, error):
+        if isinstance(error, commands.CommandOnCooldown):
+           error = f"This command is on cooldown, try again after {round(error.retry_after)} seconds."
+        elif isinstance(error, commands.MissingRole):   
+           error  =  discord.Embed(title = "**Error!**",description =  "```diff\n-<:GA_no:851965642318938122> - You don't have the permissions to use this command!```") 
+        elif isinstance(error, commands.MissingRequiredArgument):  
+           error  =  discord.Embed(title = "**Error!**",description =  f"```diff\n-<:GA_no:851965642318938122> - Missing an required argument!\n{error.param}\n- ^^^^^```")
+        else:
+           error = "Oh no! Something went wrong while running the command!"    
+
+
+        await ctx.send(error, delete_after=5)
+        await ctx.message.delete(delay=5)
 
     @commands.Cog.listener()
     async def on_member_join(self, member: discord.Member):
@@ -40,23 +55,29 @@ class Utilities(commands.Cog):
 
         await channel.send(f"Welcome, {member}!")
 
+   
     @commands.Cog.listener()
     async def on_message_delete(self, message: discord.Message):
         self.last_msg = message
-    
     @commands.command(name="snipe")
     async def snipe(self, ctx: commands.Context):
         """A command to snipe delete messages."""
         if not self.last_msg:  # on_message_delete hasn't been triggered since the bot started
-            await ctx.send("There is no message to snipe!")
-            return
+          nomessage =  discord.Embed(title="**Error!**", description = "**```diff\n-There is no message to snipe!\n```**")
+          await ctx.send(embed =nomessage)
+          return
 
         author = self.last_msg.author
         content = self.last_msg.content
 
         stringembed = discord.Embed(title=f"Message from {author}", description=content)
         await ctx.send(embed=stringembed)
-    
+    @snipe.error
+    async def snipe_error(ctx, error):
+      if isinstance(error, commands.CommandError):
+
+        snipeerror = discord.Embed(title="**ERROR!**", description = "```diff \n- An error occured while using this command.  ```")
+        await ctx.send(embed=snipeerror)
     
 
 

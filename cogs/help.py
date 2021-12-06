@@ -23,6 +23,6 @@ class Helpcog(commands.Cog):
        bot.help_command = help_command
 
 
-def setup(bot: commands.Bot):
+def setup(bot):
     bot.add_cog(Helpcog(bot))
     

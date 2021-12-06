@@ -1,11 +1,12 @@
 import discord
 from discord.ext import commands
 import os
+import logging
+import keep_alive
 
 
 
-
-
+logging.basicConfig(level=logging.WARNING)
 
 
 
@@ -17,11 +18,8 @@ bot = commands.Bot(command_prefix="=", intents=intents)
 
 @bot.event
 async def on_ready():
-    print('[STATUS] Logged in as {0.user}'.format(bot))
-
-
-
-
+    print('\033[1;32m[STATUS] Logged in as {0.user}'.format(bot))
+    print("\033[1;32m[STATUS] Bot Ready! \u001b[0m\n")
 
 
 # Load:
@@ -45,10 +43,11 @@ for filename in os.listdir('cogs'): # import os in your code and also replace th
         bot.load_extension(f'cogs.{filename[:-3]}') # replaces file extension('.py') and loads it
 
 
+
 my_secret = os.environ['TOKEN']
 bot.run(my_secret)
 
-
+keep_alive.keep_alive()
 
 
 

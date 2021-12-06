@@ -1,12 +1,18 @@
 import discord
 from discord.ext import commands
+from discord.commands import slash_command 
 import asyncio
 import motor.motor_asyncio
+import pprint
+import re
 
-from datetime import date
-today = date.today()
+from datetime import datetime
+today = datetime.now()
 
 import os
+
+bot = commands.Bot(command_prefix='>')
+
 
 
 connection_url = os.environ['MONGO_URI']
@@ -14,11 +20,31 @@ client = motor.motor_asyncio.AsyncIOMotorClient(str(connection_url))
 db = client['moderation']
 warning_collection = db['warnings']
 modlog_collection = db['modlog']
-print("Initialized Database\n-----")
+
+print("\u001b[1;32mInitialized Database\n \u001b[0m")
 
 
+#start code for mute command
+
+time_regex = re.compile("(?:(\d{1,5})(h|s|m|d))+?")
+time_dict = {"h":3600, "s":1, "m":60, "d":86400}
+
+class TimeConverter(commands.Converter):
+    async def convert(self, ctx, argument):
+        args = argument.lower()
+        matches = re.findall(time_regex, args)
+        time = 0
+        for v, k in matches:
+            try:
+                time += time_dict[k]*float(v)
+            except KeyError:
+                raise commands.BadArgument("{} is an invalid time-key! h/m/s/d are valid!".format(k))
+            except ValueError:
+                raise commands.BadArgument("{} is not a number!".format(v))
+        return time
 
 
+#moderation start
 
 
 class Moderation(commands.Cog):
@@ -74,42 +100,83 @@ class Moderation(commands.Cog):
 
         await message.edit(content="Ban cancelled.")
 
+
+
+    @commands.command(name="mute")
+    @commands.has_permissions(manage_roles=True)
+    async def mute(self, ctx, member:discord.Member, *, time:TimeConverter = None):
+        """Mutes a member for the specified time- time in 2d 10h 3m 2s format ex:
+        &mute @Someone 1d"""
+        role = discord.utils.get(ctx.guild.roles, name="Muted")
+        await member.add_roles(role)
+        await ctx.send(("Muted {} for {}s" if time else "Muted {}").format(member, time))
+        if time:
+            await asyncio.sleep(time)
+            await member.remove_roles(role)
+
+
+
     @commands.command(pass_context = True)
-    @commands.has_any_role()
-    async def warn(self, ctx, member:discord.Member, *,reason):
+    @commands.has_any_role(853391228409085962)
+    async def warn(self, ctx, member: discord.Member, *,reason):
       if member.id in [ctx.author.id,self.bot.user.id]:
         return await ctx.send("**Error! You cannot ban yourself or the bot!**")
       
       author = ctx.author
-      member = ctx.member
       if not reason:
         await ctx.send("Please provide a reason")
         return
-      reason = ' '.join(reason)
 
+      reason.strip()
 
-      await ctx.send(f'**{member.mention} has been warned by {author.name}.**')
-
+      #CHANNEL CONFIRM
+      await ctx.send(f"**<:GA_yes:851965019045494804> - {member.name} [{member.id}] has been warned by {author.name}.**")
+      #MEMBER DM
       await member.send(f'You have been warned in **{ctx.guild.name}** by **{author.name}**.')
+      #MODLOG-DB
+      await modlog_collection.insert_one({"Type":"WARN","User-ID:":(member.id),"Moderator-ID:":(author.id), "Reason:":f"{reason}","Date:":(today)})
+      #WARNING DB
+      await warning_collection.insert_one({"Type":"WARN","User-ID:":(member.id),"Moderator-ID:":(author.id), "Reason:":f"{reason}","Date:":(today)})
+      #SERVER MODLOG
+      log = discord.Embed(colour=0x56C9F0,title="**Warning**", description=f"`Username`: {member}\n`User ID:` {member.id}\n`Moderator:`{ author.mention}\n`Reason:` {reason}")
 
-      await modlog_collection.insert_one({"Type":"WARN","User-ID:":(member.id),"Moderator-ID:":(author.id), "Reason:":"(reason)","Date:":(today)})
 
-      await warning_collection.insert_one({"Type":"WARN","User-ID:":(member.id),"Moderator-ID:":(author.id), "Reason:":"(reason)","Date:":(today)})
-
-      log = discord.Embed(color=discord.Colour.blue,title="**Warning**", description=f"`Username`:{member}\n`User ID:`{member.id}\n`Moderator:`{author.mention}\n`Reason:`{reason}")
+      
 
       channel = self.bot.get_channel(908474591230443580)
 
       await channel.send(embed=log)
 
 
+    @commands.command(name="warnings")
+    @commands.has_any_role(853391228409085962)
+    async def warnings(self, ctx, member: discord.Member):
+      
+      
+      n = await warning_collection.count_documents({'User-ID:':(member.id)})
 
 
       
+      cursor = warning_collection.find({"User-ID:":(member.id)}).sort('Date:')
+      for document in await cursor.to_list(length=100):
+          pprint.pformat(document)
+          pprint.pprint(document)
+        
+          embed = discord.Embed(colour=0x56C9F0, title="Warning List", description="This is the list of warnings for the requested user.")
+          embed.set_author(name=ctx.author.display_name, icon_url=ctx.author.avatar.url)
+          embed.add_field(name="USER ID", value=f"`[ {member.id} ]`", inline = True)
+          embed.add_field(name="Number of Warnings", value=n, inline = True)
+          embed.add_field(name="Warning List", value=f"```{document}```", inline = False)
+
+      
+        
+        
+          await ctx.send(embed=embed)
+   
 
 
 
-def setup(bot: commands.Bot):
+def setup(bot):
     bot.add_cog(Moderation(bot))       
        
        

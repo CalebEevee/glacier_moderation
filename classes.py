@@ -1,8 +1,9 @@
-import discord
+import disnake
+from disnake.ext import commands
 
 
 
-class Confirm(discord.ui.View):
+class Confirm(disnake.ui.View):
     def __init__(self):
         super().__init__()
         self.value = None
@@ -10,15 +11,15 @@ class Confirm(discord.ui.View):
     # When the confirm button is pressed, set the inner value to `True` and
     # stop the View from listening to more input.
     # We also send the user an ephemeral message that we're confirming their choice.
-    @discord.ui.button(label="Confirm", style=discord.ButtonStyle.blurple)
-    async def confirm(self, button, interaction, ctx):
+    @disnake.ui.button(label="Confirm", style=disnake.ButtonStyle.blurple)
+    async def confirm(ctx: commands.Context, self, button: disnake.ui.Button, interaction: disnake.MessageInteraction):
         await interaction.response.send_message("Confirming", ephemeral=True)
         self.value = True
         self.stop()
 
     # This one is similar to the confirmation button except sets the inner value to `False`
-    @discord.ui.button(label="Cancel", style=discord.ButtonStyle.red)
-    async def cancel(self, button, interaction):
+    @disnake.ui.button(label="Cancel", style=disnake.ButtonStyle.grey)
+    async def cancel(ctx: commands.Context, self, button: disnake.ui.Button, interaction: disnake.MessageInteraction):
         await interaction.response.send_message("Cancelling", ephemeral=True)
         self.value = False
         self.stop()

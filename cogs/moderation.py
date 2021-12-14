@@ -1,6 +1,5 @@
-import discord
-from discord.ext import commands
-from discord.commands import slash_command 
+import disnake
+from disnake.ext import commands
 import asyncio
 import motor.motor_asyncio
 import pprint
@@ -54,7 +53,7 @@ class Moderation(commands.Cog):
      
     @commands.command(name="ban")
     @commands.has_any_role(846502340017913907, 846503865775030323)
-    async def ban(self, ctx, member: discord.Member, *, reason= "No reason given."): 
+    async def ban(self, ctx, member: disnake.Member, *, reason= "No reason given."): 
         """Ban a user!"""
         author = ctx.author
         if member == None or member == ctx.message.author:
@@ -64,12 +63,12 @@ class Moderation(commands.Cog):
         check = lambda m: m.author == ctx.author and m.channel == ctx.channel
         
         if member.guild_permissions.administrator and member != None:
-          embed=discord.Embed(color=discord.Colour.red(), title="Administrator", description="This user is an administrator and is not allowed to be banned.")
+          embed=disnake.Embed(color=disnake.Colour.red(), title="Administrator", description="This user is an administrator and is not allowed to be banned.")
           await ctx.send(embed=embed)
           return
 
         if reason == None:
-          embed1=discord.Embed(color=discord.Colour.red(), title="Reason Required!", description="You must enter a reason to ban this member.")      
+          embed1=disnake.Embed(color=disnake.Colour.red(), title="Reason Required!", description="You must enter a reason to ban this member.")      
           await ctx.send(embed=embed1)
           return
 
@@ -81,8 +80,8 @@ class Moderation(commands.Cog):
             return
         
         if confirm.content == "yes":
-            dm =  discord.Embed(title="**You have been banned!**", description=f"You have been **banned** from {ctx.guild.name}! **```diff\n-{reason} \n```**")
-            log = discord.Embed(color=discord.Colour.green,title="**Ban**", description=f"`Username`:{member}\n`User ID:`{member.id}\n`Moderator:`{author.mention}\n`Reason:`{reason}")
+            dm =  disnake.Embed(title="**You have been banned!**", description=f"You have been **banned** from {ctx.guild.name}! **```diff\n-{reason} \n```**")
+            log = disnake.Embed(color=disnake.Colour.green,title="**Ban**", description=f"`Username`:{member}\n`User ID:`{member.id}\n`Moderator:`{author.mention}\n`Reason:`{reason}")
 
             channel = self.bot.get_channel(908474591230443580)
 
@@ -104,10 +103,10 @@ class Moderation(commands.Cog):
 
     @commands.command(name="mute")
     @commands.has_permissions(manage_roles=True)
-    async def mute(self, ctx, member:discord.Member, *, time:TimeConverter = None):
+    async def mute(self, ctx, member:disnake.Member, *, time:TimeConverter = None):
         """Mutes a member for the specified time- time in 2d 10h 3m 2s format ex:
         &mute @Someone 1d"""
-        role = discord.utils.get(ctx.guild.roles, name="Muted")
+        role = disnake.utils.get(ctx.guild.roles, name="Muted")
         await member.add_roles(role)
         await ctx.send(("Muted {} for {}s" if time else "Muted {}").format(member, time))
         if time:
@@ -118,7 +117,7 @@ class Moderation(commands.Cog):
 
     @commands.command(pass_context = True)
     @commands.has_any_role(853391228409085962)
-    async def warn(self, ctx, member: discord.Member, *,reason):
+    async def warn(self, ctx, member: disnake.Member, *,reason):
       if member.id in [ctx.author.id,self.bot.user.id]:
         return await ctx.send("**Error! You cannot ban yourself or the bot!**")
       
@@ -138,7 +137,7 @@ class Moderation(commands.Cog):
       #WARNING DB
       await warning_collection.insert_one({"Type":"WARN","User-ID:":(member.id),"Moderator-ID:":(author.id), "Reason:":f"{reason}","Date:":(today)})
       #SERVER MODLOG
-      log = discord.Embed(colour=0x56C9F0,title="**Warning**", description=f"`Username`: {member}\n`User ID:` {member.id}\n`Moderator:`{ author.mention}\n`Reason:` {reason}")
+      log = disnake.Embed(colour=0x56C9F0,title="**Warning**", description=f"`Username`: {member}\n`User ID:` {member.id}\n`Moderator:`{ author.mention}\n`Reason:` {reason}")
 
 
       
@@ -150,7 +149,7 @@ class Moderation(commands.Cog):
 
     @commands.command(name="warnings")
     @commands.has_any_role(853391228409085962)
-    async def warnings(self, ctx, member: discord.Member):
+    async def warnings(self, ctx, member: disnake.Member):
       
       
       n = await warning_collection.count_documents({'User-ID:':(member.id)})
@@ -162,7 +161,7 @@ class Moderation(commands.Cog):
           pprint.pformat(document)
           pprint.pprint(document)
         
-          embed = discord.Embed(colour=0x56C9F0, title="Warning List", description="This is the list of warnings for the requested user.")
+          embed = disnake.Embed(colour=0x56C9F0, title="Warning List", description="This is the list of warnings for the requested user.")
           embed.set_author(name=ctx.author.display_name, icon_url=ctx.author.avatar.url)
           embed.add_field(name="USER ID", value=f"`[ {member.id} ]`", inline = True)
           embed.add_field(name="Number of Warnings", value=n, inline = True)

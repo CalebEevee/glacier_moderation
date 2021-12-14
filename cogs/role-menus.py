@@ -1,6 +1,5 @@
-import discord
-from discord.commands import slash_command
-from discord.ext import commands
+import disnake
+from disnake.ext import commands
 
 """
 Let users assign themselves roles by clicking on Buttons.
@@ -20,19 +19,19 @@ color_role_ids = [
 ]
 
 
-class RoleButton(discord.ui.Button):
-    def __init__(self, role: discord.Role):
+class RoleButton(disnake.ui.Button):
+    def __init__(self, role: disnake.Role):
         """
         A button for one role. `custom_id` is needed for persistent views.
         """
         super().__init__(label=role.name,
-                         style=discord.enums.ButtonStyle.primary, custom_id=str(role.id))
+                         style=disnake.enums.ButtonStyle.primary, custom_id=str(role.id))
 
-    async def callback(self, interaction: discord.Interaction):
+    async def callback(self, interaction: disnake.Interaction):
         """This function will be called any time a user clicks on this button
         Parameters
         ----------
-        interaction : discord.Interaction
+        interaction : disnake.Interaction
             The interaction object that was created when the user clicked on the button
         """
 
@@ -80,14 +79,14 @@ class ButtonRoleCog(commands.Cog):
         """
 
         # timeout is None because we want this view to be persistent
-        view = discord.ui.View(timeout=None)
+        view = disnake.ui.View(timeout=None)
 
         # loop through the list of roles and add a new button to the view for each role
         for role_id in ping_role_ids:
             # get the role the guild by ID
             role = ctx.guild.get_role(role_id)
             view.add_item(RoleButton(role))
-            embed = discord.Embed(title="**__PING ROLES__**,", description= "**`[ Click a button to assign yourself a role ]`**")
+            embed = disnake.Embed(title="**__PING ROLES__**,", description= "**`[ Click a button to assign yourself a role ]`**")
 
         await ctx.send(embed=embed, view=view)
 
@@ -100,14 +99,14 @@ class ButtonRoleCog(commands.Cog):
         """
 
         # timeout is None because we want this view to be persistent
-        view = discord.ui.View(timeout=None)
+        view = disnake.ui.View(timeout=None)
 
         # loop through the list of roles and add a new button to the view for each role
         for role_id in ping_role_ids:
             # get the role the guild by ID
             role = ctx.guild.get_role(role_id)
             view.add_item(RoleButton(role))
-            embed = discord.Embed(title="**__PING ROLES__**,", description= "**`[ Click a button to assign yourself a role ]`**")
+            embed = disnake.Embed(title="**__PING ROLES__**,", description= "**`[ Click a button to assign yourself a role ]`**")
 
 
             
@@ -121,14 +120,14 @@ class ButtonRoleCog(commands.Cog):
         """
 
         # timeout is None because we want this view to be persistent
-        view = discord.ui.View(timeout=None)
+        view = disnake.ui.View(timeout=None)
 
         # loop through the list of roles and add a new button to the view for each role
         for role_id in color_role_ids:
             # get the role the guild by ID
             role = ctx.guild.get_role(role_id)
             view.add_item(RoleButton(role))
-            embed = discord.Embed(title="**__COLOR ROLES__**,", description= "**`[ Click a button to assign yourself a role ]`**")
+            embed = disnake.Embed(title="**__COLOR ROLES__**,", description= "**`[ Click a button to assign yourself a role ]`**")
 
 
             
@@ -143,7 +142,7 @@ class ButtonRoleCog(commands.Cog):
         """
 
         # we recreate the view as we did in the /post command
-        view = discord.ui.View(timeout=None)
+        view = disnake.ui.View(timeout=None)
         # make sure to set the guild ID here to whatever server you want the buttons in
         guild = self.bot.get_guild(845454672755425362)
         for role_id in ping_role_ids:

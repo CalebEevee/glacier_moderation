@@ -1,11 +1,11 @@
-import discord
-from discord.ext import commands
+import disnake
+from disnake.ext import commands
 
 class MyHelp(commands.HelpCommand):
     async def send_bot_help(self, mapping):
         channel = self.get_destination()
 
-        helpembed = discord.Embed(title = "Glacier Moderation Help Menu",description = "Here is the list of commands!", colour=0x87CEEB)
+        helpembed = disnake.Embed(title = "Glacier Moderation Help Menu",description = "Here is the list of commands!", colour=0x87CEEB)
         helpembed.set_author(name = "Glacier Moderation", icon_url = "https://images-ext-1.discordapp.net/external/_LmWpCrF4y2KYXdC3ssm4CSBgKhJxvpQy4i-6D03mSg/%3Fsize%3D1024/https/cdn.discordapp.com/avatars/851592943075721268/58549a661b24ec550d5091a11599a030.png")
         helpembed.add_field(name="Utilities", value="`help` \n `setstatus`\n `snipe` \n`ping`", inline=True)
         helpembed.add_field(name="Field 2", value="An inline field!", inline=True)

@@ -24,6 +24,7 @@ class Staff(commands.Cog):
 
     @staff.command(name="warn")
     async def _staff_warn(self, ctx, member: disnake.Member, *, reason):
+        """Staff-warn a staff member."""
         if not reason:
           await ctx.send("Please provide a reason!")
           return
@@ -55,6 +56,7 @@ class Staff(commands.Cog):
 
     @staff.command(name="strike")
     async def _staff_strike(self, ctx, member: disnake.Member, *, reason):
+        """Staff-strike a staff member."""
         if not reason:
           await ctx.send("Please provide a reason!")
           return
@@ -88,6 +90,7 @@ class Staff(commands.Cog):
 
     @staff.command(name="log-demote")
     async def _staff_log_demote(self, ctx, member: disnake.Member, oldrole: disnake.Role, newrole: disnake.Role ,*, reason):
+        """Log the demotion of a staff member."""
 
         if not reason:
           await ctx.send("Please provide a reason!")
@@ -145,6 +148,7 @@ class Staff(commands.Cog):
 
     @staff.command(name="log-fire")
     async def _staff_log_fire(self, ctx, member: disnake.Member, *, reason):
+        """Log the firing of a staff member."""
 
         if not reason:
           await ctx.send("Please provide a reason!")

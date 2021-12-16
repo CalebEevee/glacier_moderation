@@ -20,7 +20,7 @@ db = client['moderation']
 warning_collection = db['warnings']
 modlog_collection = db['modlog']
 
-print("\u001b[1;32mInitialized Database\n \u001b[0m")
+print("\u001b[1;32m[STATUS] Initialized Database \u001b[0m")
 
 
 #start code for mute command

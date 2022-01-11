@@ -11,7 +11,8 @@ dnspython = "^2.1.0"
 pastecord = "^1.0.0"
 Flask = "^2.0.2"
 disnake = "^2.2.2"
-black = "^21.12b0"
+yapf = "^0.32.0"
+platformdirs = "^2.4.1"
 
 [tool.poetry.dev-dependencies]
 

@@ -3,8 +3,8 @@ from disnake.ext import commands
 import classes
 from classes import Confirm
 import time
-from pastecord import create_document
 from datetime import datetime
+from pastecord import create_document
 
 bot = commands.Bot()
 

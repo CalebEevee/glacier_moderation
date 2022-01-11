@@ -4,7 +4,7 @@ from threading import Thread
 app = Flask(__name__)
 
 
-@app.route('/')
+@app.route("/")
 def main():
     return "Your bot is alive!\nThis is the webserver for Glacier Moderation!"
 
@@ -16,5 +16,6 @@ def run():
 def keep_alive():
     server = Thread(target=run)
     server.start()
+
 
 keep_alive()

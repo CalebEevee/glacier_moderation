@@ -10,12 +10,19 @@ Make sure to load this cog when your bot starts!
 """
 
 # this is the list of role IDs that will be added as buttons.
-ping_role_ids = [
-    853657348290772993, 853657556684505130, 853657678324826112
-]
+ping_role_ids = [853657348290772993, 853657556684505130, 853657678324826112]
 
 color_role_ids = [
-    853658889295101986, 853659023001124905, 853659105726300180, 853659183638904842, 853659429853069362, 853659493811224587, 853659577932054528, 853659631121334363, 853659797914910760, 853659960307089408
+    853658889295101986,
+    853659023001124905,
+    853659105726300180,
+    853659183638904842,
+    853659429853069362,
+    853659493811224587,
+    853659577932054528,
+    853659631121334363,
+    853659797914910760,
+    853659960307089408,
 ]
 
 
@@ -24,8 +31,11 @@ class RoleButton(disnake.ui.Button):
         """
         A button for one role. `custom_id` is needed for persistent views.
         """
-        super().__init__(label=role.name,
-                         style=disnake.enums.ButtonStyle.primary, custom_id=str(role.id))
+        super().__init__(
+            label=role.name,
+            style=disnake.enums.ButtonStyle.primary,
+            custom_id=str(role.id),
+        )
 
     async def callback(self, interaction: disnake.Interaction):
         """This function will be called any time a user clicks on this button
@@ -45,17 +55,20 @@ class RoleButton(disnake.ui.Button):
             # you can do some error handling here
             return
 
-
         # passed all checks
         # add the role and send a response to the uesr ephemerally (hidden to other users)
         if role not in user.roles:
             # give the user the role if they don't already have it
             await user.add_roles(role)
-            await interaction.response.send_message(f"🎉 You have been given the role {role.mention}", ephemeral=True)
+            await interaction.response.send_message(
+                f"🎉 You have been given the role {role.mention}", ephemeral=True
+            )
         else:
             # else, take the role from the user
             await user.remove_roles(role)
-            await interaction.response.send_message(f"❌ The {role.mention} role has been taken from you", ephemeral=True)
+            await interaction.response.send_message(
+                f"❌ The {role.mention} role has been taken from you", ephemeral=True
+            )
 
 
 class ButtonRoleCog(commands.Cog):
@@ -68,15 +81,18 @@ class ButtonRoleCog(commands.Cog):
 
     @commands.group()
     async def post(self, ctx):
-    # Do nothing if a sub command is not invoked, you could also perhaps send the help message
+        # Do nothing if a sub command is not invoked, you could also perhaps send the help message
         if not ctx.invoked_subcommand:
-          return
+            return
 
     # make sure to set the guild ID here to whatever server you want the buttons in
-    @commands.slash_command(guild_ids=[845454672755425362], name = "post-button-role-pings", description="Post the button role message")
+    @commands.slash_command(
+        guild_ids=[845454672755425362],
+        name="post-button-role-pings",
+        description="Post the button role message",
+    )
     async def postbuttonpings(self, ctx: commands.Context):
-        """Slash command to post a new view with a button for each role
-        """
+        """Slash command to post a new view with a button for each role"""
 
         # timeout is None because we want this view to be persistent
         view = disnake.ui.View(timeout=None)
@@ -86,17 +102,16 @@ class ButtonRoleCog(commands.Cog):
             # get the role the guild by ID
             role = ctx.guild.get_role(role_id)
             view.add_item(RoleButton(role))
-            embed = disnake.Embed(title="**__PING ROLES__**,", description= "**`[ Click a button to assign yourself a role ]`**")
+            embed = disnake.Embed(
+                title="**__PING ROLES__**,",
+                description="**`[ Click a button to assign yourself a role ]`**",
+            )
 
         await ctx.send(embed=embed, view=view)
 
-
-
-
-    @post.command(name ="button-role-pings")
+    @post.command(name="button-role-pings")
     async def _postbuttonpings(self, ctx: commands.Context):
-        """Regular command to post a new view with a button for each role
-        """
+        """Regular command to post a new view with a button for each role"""
 
         # timeout is None because we want this view to be persistent
         view = disnake.ui.View(timeout=None)
@@ -106,18 +121,16 @@ class ButtonRoleCog(commands.Cog):
             # get the role the guild by ID
             role = ctx.guild.get_role(role_id)
             view.add_item(RoleButton(role))
-            embed = disnake.Embed(title="**__PING ROLES__**,", description= "**`[ Click a button to assign yourself a role ]`**")
-
-
-            
+            embed = disnake.Embed(
+                title="**__PING ROLES__**,",
+                description="**`[ Click a button to assign yourself a role ]`**",
+            )
 
         await ctx.send(embed=embed, view=view)
 
-    
-    @post.command(name = "button-role-colors")
+    @post.command(name="button-role-colors")
     async def _postbuttoncolors(self, ctx: commands.Context):
-        """Regular command to post a new view with a button for each role
-        """
+        """Regular command to post a new view with a button for each role"""
 
         # timeout is None because we want this view to be persistent
         view = disnake.ui.View(timeout=None)
@@ -127,10 +140,10 @@ class ButtonRoleCog(commands.Cog):
             # get the role the guild by ID
             role = ctx.guild.get_role(role_id)
             view.add_item(RoleButton(role))
-            embed = disnake.Embed(title="**__COLOR ROLES__**,", description= "**`[ Click a button to assign yourself a role ]`**")
-
-
-            
+            embed = disnake.Embed(
+                title="**__COLOR ROLES__**,",
+                description="**`[ Click a button to assign yourself a role ]`**",
+            )
 
         await ctx.send(embed=embed, view=view)
 
@@ -148,7 +161,7 @@ class ButtonRoleCog(commands.Cog):
         for role_id in ping_role_ids:
             role = guild.get_role(role_id)
             view.add_item(RoleButton(role))
-        
+
         for role_id in color_role_ids:
             role = guild.get_role(role_id)
             view.add_item(RoleButton(role))

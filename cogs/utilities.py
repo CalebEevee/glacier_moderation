@@ -1,10 +1,12 @@
-import disnake
-from disnake.ext import commands
-import classes
-from classes import Confirm
 import time
 from datetime import datetime
+
+import disnake
+from disnake.ext import commands
 from pastecord import create_document
+
+import classes
+from classes import Confirm
 
 bot = commands.Bot()
 
@@ -28,8 +30,9 @@ class Utilities(commands.Cog):
             content=f"Pong! {round(self.bot.latency * 1000)}ms\nAPI: {round((end_time - start_time) * 1000)}ms"
         )
 
-        print(f"\x1b[0;34m[CMD] {ctx.author}  {ctx.author.id} used the command\x1b[0;0m PING\x1b ")
-        
+        print(
+            f"\x1b[0;34m[CMD] {ctx.author}  {ctx.author.id} used the command\x1b[0;0m PING\x1b "
+        )
 
     @commands.command(name="setstatus")
     @commands.cooldown(rate=1, per=5)

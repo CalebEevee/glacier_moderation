@@ -23,5 +23,3 @@ repos:
     hooks:
     -   id: black
         name: Running black in all files.
-
-

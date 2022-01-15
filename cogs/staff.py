@@ -107,15 +107,7 @@ class Staff(commands.Cog):
         await member.send(member.mention, embed=embed)
 
     @staff.command(name="log-demote")
-    async def _staff_log_demote(
-        self,
-        ctx,
-        member: disnake.Member,
-        oldrole: disnake.Role,
-        newrole: disnake.Role,
-        *,
-        reason,
-    ):
+    async def _staff_log_demote(self, ctx, member: disnake.Member, oldrole: disnake.Role, newrole: disnake.Role,*, reason):
         """Log the demotion of a staff member."""
 
         if not reason:

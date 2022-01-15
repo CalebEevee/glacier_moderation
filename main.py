@@ -38,13 +38,9 @@ async def unload(ctx, extension):
 
 
 # Add this after the load and unload commands
-for filename in os.listdir(
-    "cogs"
-):  # import os in your code and also replace the 'cogs' with your folder name
+for filename in os.listdir("cogs"):  # import os in your code and also replace the 'cogs' with your folder name
     if filename.endswith(".py"):
-        bot.load_extension(
-            f"cogs.{filename[:-3]}"
-        )  # replaces file extension('.py') and loads it
+        bot.load_extension(f"cogs.{filename[:-3]}")  # replaces file extension('.py') and loads it
 
 
 my_secret = os.environ["TOKEN"]

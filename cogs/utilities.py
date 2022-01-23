@@ -102,7 +102,7 @@ class Utilities(commands.Cog):
         name="snipe",
         description="UTILITIES - A command to snipe delete messages.",
     )
-    async def snipe(self, ctx: commands.Context):
+    async def snipe(self, ctx: disnake.ApplicationCommandInteraction):
         if (
             not self.last_msg
         ):  # on_message_delete hasn't been triggered since the bot started

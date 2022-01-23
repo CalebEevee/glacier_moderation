@@ -91,7 +91,7 @@ class ButtonRoleCog(commands.Cog):
         name="post-button-role-pings",
         description="Post the button role message",
     )
-    async def postbuttonpings(self, ctx: commands.Context):
+    async def postbuttonpings(self, ctx: disnake.ApplicationCommandInteraction):
         """Slash command to post a new view with a button for each role"""
 
         # timeout is None because we want this view to be persistent

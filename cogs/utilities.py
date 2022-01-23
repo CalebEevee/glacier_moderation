@@ -5,8 +5,8 @@ import disnake
 from disnake.ext import commands
 from pastecord import create_document
 
+import checks
 import classes
-from classes import Confirm
 
 bot = commands.Bot()
 
@@ -19,9 +19,19 @@ class Utilities(commands.Cog):
         self.last_msg = None
 
     @commands.command(name="ping")
-    @commands.cooldown(rate=1, per=5)
+    @commands.cooldown(rate=1, per=5, type=commands.BucketType.user)
+    @commands.check(checks.LEVEL_W)
     async def ping(self, ctx: commands.Context):
-        """Get the bot's current websocket and API latency."""
+        """
+        Get the bot's current websocket and API latency.
+
+        **Permission Requirement:**```ini
+        [ Z ] Level = "Member"
+        ```
+        **Usage:**```
+        =ping
+        ```
+        """
         start_time = time.time()
         message = await ctx.send("Testing Ping...")
         end_time = time.time()
@@ -184,7 +194,7 @@ class Utilities(commands.Cog):
     async def confirm_test(self, ctx: commands.Context):
         """Asks the user a question to confirm something."""
         # We create the view and assign it to a variable so we can wait for it later.
-        view = Confirm()
+        view = classes.Confirm()
         embed = disnake.Embed(
             title="Confirm?",
             description="<:GA_yes:851965019045494804> Do you want to continue with the command **` confirm-test `**?",

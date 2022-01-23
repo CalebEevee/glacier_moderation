@@ -30,6 +30,16 @@ class MyHelp(commands.HelpCommand):
         embeds[0].set_footer(text=f"Page 1 of {len(embeds)}")
         await channel.send(embed=embeds[0], view=classes.Menu(embeds))
 
+    async def send_command_help(self, command):
+        embed = disnake.Embed(title=self.get_command_signature(command), color=0x56C9F0)
+        embed.add_field(name="Help", value=command.help)
+        alias = command.aliases
+        if alias:
+            embed.add_field(name="Aliases", value=", ".join(alias), inline=False)
+
+        channel = self.get_destination()
+        await channel.send(embed=embed)
+
 
 class YourCog(commands.Cog):
     def __init__(self, bot):

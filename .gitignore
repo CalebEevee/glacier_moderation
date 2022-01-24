@@ -1,3 +1,4 @@
 *.env
 *.json
 *.yaml
+*.yml

@@ -1,4 +1,8 @@
-*.env
+.env
 *.json
 *.yaml
 *.yml
+
+__pycache__/
+secrets.env
+bot.config/

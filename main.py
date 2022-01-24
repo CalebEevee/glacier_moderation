@@ -4,6 +4,7 @@ import os
 import disnake
 from disnake.ext import commands
 
+import checks
 import keep_alive
 
 logging.basicConfig(level=logging.WARNING)
@@ -22,17 +23,37 @@ async def on_ready():
 
 
 # Load:
-@bot.command(aliases=["l"])
-@commands.is_owner()
+@bot.command()
+@commands.check(checks.LEVEL_A)
 async def load(ctx, extension):
+    """
+    Loads a cog.
+
+    **Permission Requirement:**```ini
+    [ A ] Level = "Owner"
+    ```
+    **Usage:**```md
+    =load <extension>
+    ```
+    """
     bot.load_extension(f"{extension}")
     await ctx.send(f"Successfully loaded `{extension}`")
 
 
 # Unload:
-@bot.command(aliases=["ul"])
-@commands.is_owner()
+@bot.command()
+@commands.check(checks.LEVEL_A)
 async def unload(ctx, extension):
+    """
+    Unloads a cog.
+
+    **Permission Requirement:**```ini
+    [ A ] Level = "Owner"
+    ```
+    **Usage:**```md
+    =unload <extension>
+    ```
+    """
     bot.unload_extension(f"{extension}")
     await ctx.send(f"Successfully unloaded `{extension}`")
 

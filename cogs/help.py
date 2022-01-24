@@ -18,7 +18,7 @@ class MyHelp(commands.HelpCommand):
             ),
             disnake.Embed(
                 title="Page 2",
-                description='```ini\n[ Utility Commands ]\n``````The letters in brackets indicate which permission level is required to execute the command.\nNormal members are located under the level W.```\n```ini\n[Z] Ping = "Get the ping and latency"\n[Z] Snipe = "Get the last deleted message in the channel"\n```',
+                description='```ini\n[ Utility Commands ]\n``````The letters in brackets indicate which permission level is required to execute the command.\nNormal members are located under the level W.```\n```ini\n[W] Ping = "Get the ping and latency"\n[W] Snipe = "Get the last deleted message in the channel"\n```',
                 colour=0x56C9F0,
             ),
             disnake.Embed(

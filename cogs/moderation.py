@@ -1,4 +1,5 @@
 import asyncio
+import os
 import pprint
 import re
 from datetime import datetime
@@ -6,18 +7,14 @@ from datetime import datetime
 import disnake
 import motor.motor_asyncio
 from disnake.ext import commands
-
-today = datetime.now()
-
-import os
-
 from dotenv import load_dotenv
 
-bot = commands.Bot(command_prefix=">")
+import classes
+
+bot = commands.Bot(command_prefix="=")
+today = datetime.now()
 
 load_dotenv()
-
-
 connection_url = os.getenv("MONGO_URI")
 client = motor.motor_asyncio.AsyncIOMotorClient(str(connection_url))
 db = client["moderation"]
@@ -165,20 +162,20 @@ class Moderation(commands.Cog):
         await modlog_collection.insert_one(
             {
                 "Type": "WARN",
-                "User-ID:": (member.id),
-                "Moderator-ID:": (author.id),
-                "Reason:": f"{reason}",
-                "Date:": (today),
+                "User-ID": (member.id),
+                "Moderator-ID": (author.id),
+                "Reason": f"{reason}",
+                "Date": (today),
             }
         )
         # WARNING DB
         await warning_collection.insert_one(
             {
                 "Type": "WARN",
-                "User-ID:": (member.id),
-                "Moderator-ID:": (author.id),
-                "Reason:": f"{reason}",
-                "Date:": (today),
+                "User-ID": (member.id),
+                "Moderator-ID": (author.id),
+                "Reason": f"{reason}",
+                "Date": (today),
             }
         )
         # SERVER MODLOG
@@ -196,28 +193,51 @@ class Moderation(commands.Cog):
     @commands.has_any_role(853391228409085962)
     async def warnings(self, ctx, member: disnake.Member):
 
-        n = await warning_collection.count_documents({"User-ID:": (member.id)})
+        n = await warning_collection.count_documents({"User-ID": (member.id)})
+        if n == 0:
+            error_embed = disnake.Embed(
+                color=0xFF0000,
+                title="Error!",
+                description="```diff\n- This user has no warnings!\n```",
+            )
+            await ctx.send(embed=error_embed)
+            return
+        elif n > 50:
+            error_embed = disnake.Embed(
+                color=0xFF0000,
+                title="Error!",
+                description=f"```diff\n- ERROR | This user has more than 50 warnings!\n- ERROR | It is recommended to ban this user at this time!\n+ =ban{member.id} Has 50+ warnings!\n```",
+            )
+            await ctx.send(embed=error_embed)
+            return
 
-        cursor = warning_collection.find({"User-ID:": (member.id)}).sort("Date:")
-        for document in await cursor.to_list(length=100):
-            pprint.pformat(document)
-            pprint.pprint(document)
-
-            embed = disnake.Embed(
-                colour=0x56C9F0,
+        embeds = [
+            disnake.Embed(
+                color=0x56C9F0,
                 title="Warning List",
-                description="This is the list of warnings for the requested user.",
+                description=f'This is the list of warnings for the requested user.\n```ini\nUser ID =  "{member.id}"\nTotal Warnings: [{n}]\n```',
             )
-            embed.set_author(
-                name=ctx.author.display_name, icon_url=ctx.author.avatar.url
-            )
-            embed.add_field(name="USER ID", value=f"`[ {member.id} ]`", inline=True)
-            embed.add_field(name="Number of Warnings", value=n, inline=True)
-            embed.add_field(
-                name="Warning List", value=f"```{document}```", inline=False
+        ]
+
+        cursor = warning_collection.find({"User-ID": (member.id)}).sort("Date")
+
+        for document in await cursor.to_list(length=50):
+            ID = document["_id"]
+            TYPE = document["Type"]
+            UID = document["User-ID"]
+            MID = document["Moderator-ID"]
+            REASON = document["Reason"]
+            DATE = document["Date"]
+
+            embeds.append(
+                disnake.Embed(
+                    color=0x56C9F0,
+                    title="Warning",
+                    description=f'```ini\n[WARNING ID: {ID}]\nTYPE = "{TYPE}"\nUser-ID = "{UID}"\nModerator-ID = "{MID}"\nREASON = "{REASON}"\nDATE = "{DATE}"```',
+                )
             )
 
-            await ctx.send(embed=embed)
+        await ctx.send(embed=embeds[0], view=classes.Menu(embeds))
 
 
 def setup(bot):

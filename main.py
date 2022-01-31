@@ -1,5 +1,6 @@
 import logging
 import os
+from dotenv import load_dotenv
 
 import disnake
 from disnake.ext import commands
@@ -9,12 +10,12 @@ import keep_alive
 
 logging.basicConfig(level=logging.WARNING)
 
-
 intents = disnake.Intents.default()
 intents.members = True
 
 bot = commands.Bot(command_prefix="=", intents=intents)
 
+load_dotenv()
 
 @bot.event
 async def on_ready():
@@ -68,7 +69,7 @@ for filename in os.listdir(
         )  # replaces file extension('.py') and loads it
 
 
-my_secret = os.environ["TOKEN"]
+my_secret = os.getenv("TOKEN")
 bot.run(my_secret)
 
 keep_alive.keep_alive()

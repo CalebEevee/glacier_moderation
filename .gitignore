@@ -4,5 +4,4 @@
 *.yml
 
 __pycache__/
-secrets.env
-bot.config/
+bot_config/

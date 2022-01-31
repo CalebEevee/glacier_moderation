@@ -10,11 +10,14 @@ from disnake.ext import commands
 today = datetime.now()
 
 import os
+from dotenv import load_dotenv
 
 bot = commands.Bot(command_prefix=">")
 
+load_dotenv()
 
-connection_url = os.environ["MONGO_URI"]
+
+connection_url = os.getenv("MONGO_URI")
 client = motor.motor_asyncio.AsyncIOMotorClient(str(connection_url))
 db = client["moderation"]
 warning_collection = db["warnings"]

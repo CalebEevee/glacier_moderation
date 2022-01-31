@@ -1,9 +1,9 @@
 import logging
 import os
-from dotenv import load_dotenv
 
 import disnake
 from disnake.ext import commands
+from dotenv import load_dotenv
 
 import checks
 import keep_alive
@@ -16,6 +16,7 @@ intents.members = True
 bot = commands.Bot(command_prefix="=", intents=intents)
 
 load_dotenv()
+
 
 @bot.event
 async def on_ready():

@@ -10,6 +10,7 @@ from disnake.ext import commands
 today = datetime.now()
 
 import os
+
 from dotenv import load_dotenv
 
 bot = commands.Bot(command_prefix=">")

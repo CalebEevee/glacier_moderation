@@ -1,2 +1,7 @@
+.env
 *.json
 *.yaml
+*.yml
+
+__pycache__/
+bot_config/

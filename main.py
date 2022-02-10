@@ -24,6 +24,13 @@ async def on_ready():
     print("\033[1;32m[STATUS] Bot Ready! \u001b[0m\n")
 
 
+@bot.check
+async def globally_block_dms(ctx):
+    if ctx.guild is not None and ctx.guild is 845454672755425362:
+        raise commands.NoPrivateMessage()
+    return True
+
+
 # Load:
 @bot.command()
 @commands.check(checks.LEVEL_A)

@@ -88,6 +88,7 @@ class Utilities(commands.Cog):
         self.last_msg = message
 
     @commands.command(name="snipe")
+    @commands.check(checks.LEVEL_W)
     async def _snipe(self, ctx: commands.Context):
         """A command to snipe delete messages."""
         if (

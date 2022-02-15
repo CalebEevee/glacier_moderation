@@ -8,17 +8,15 @@ class ErrorHandler(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
 
-    @commands.Cog.listener
-    async def on_command_error(
-        self, ctx: commands.Context, error: commands.CommandError
-    ):
+    @commands.Cog.listener()
+    async def on_command_error(self, ctx, error):
         """Global Error Handler"""
         if isinstance(error, commands.CommandNotFound):
             return
         elif isinstance(error, commands.CommandOnCooldown):
             message = f"This commands is on cooldown. Please try again after {round(error.retry_after, 1)} seconds."
         elif isinstance(error, commands.MissingPermissions):
-            message = "You are missing the required permissino to run this command!"
+            message = "You are missing the required permissions to run this command!"
         elif isinstance(error, commands.UserInputError):
             message = "Something about your input was wrong, please check your input and try again!"
         else:

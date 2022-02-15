@@ -1,5 +1,3 @@
-from errno import EILSEQ
-
 import disnake
 from disnake.ext import commands
 

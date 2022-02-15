@@ -41,7 +41,7 @@ class Utilities(commands.Cog):
         )
 
         print(
-            f"\x1b[0;34m[CMD] {ctx.author}  {ctx.author.id} used the command\x1b[0;0m PING\x1b "
+            f"\x1b[0;34m[CMD] {ctx.author}  {ctx.author.id} used the command\x1b[0;0m PING"
         )
 
     @commands.command(name="setstatus")
@@ -88,6 +88,7 @@ class Utilities(commands.Cog):
         self.last_msg = message
 
     @commands.command(name="snipe")
+    @commands.check(checks.LEVEL_W)
     async def _snipe(self, ctx: commands.Context):
         """A command to snipe delete messages."""
         if (

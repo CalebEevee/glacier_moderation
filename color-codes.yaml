@@ -1,24 +1,24 @@
 ---
-reset: \u001b[0m
+reset: \033[0m
 
 # REGULAR
 
-black: \u001b[30m
-white: \u001b[37m
-red: \u001b[30m
-yellow: \u001b[33m
-green: \u001b[32m
-cyan: \u001b[36m
-blue: \u001b[34m
-magenta: \u001b[35m
+black: \033[30m
+white: \033[37m
+red: \033[30m
+yellow: \033[33m
+green: \033[32m
+cyan: \033[36m
+blue: \033[34m
+magenta: \033[35m
 
 # BRIGHT
 
-bright black: \u001b[1;30m
-bright white: \u001b[1;37m
-bright red: \u001b[1;31,
-bright yellow: \u001b[1;33m
-bright green: \u001b[1;32m
-bright cyan: \u001b[1;36m
-bright blue: \u001b[1;34m
-bright magenta: \u001b[1;35m
+bright black: \033[1;30m
+bright white: \033[1;37m
+bright red: \033[1;31,
+bright yellow: \033[1;33m
+bright green: \033[1;32m
+bright cyan: \033[1;36m
+bright blue: \033[1;34m
+bright magenta: \033[1;35m

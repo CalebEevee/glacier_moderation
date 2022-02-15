@@ -56,7 +56,7 @@ class Moderation(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
 
-    @commands.command(name="ban")
+    @bot.command(name="ban")
     @commands.has_any_role(846502340017913907, 846503865775030323)
     async def ban(self, ctx, member: disnake.Member, *, reason="No reason given."):
         """Ban a user!"""
@@ -123,7 +123,7 @@ class Moderation(commands.Cog):
 
         await message.edit(content="Ban cancelled.")
 
-    @commands.command(name="mute")
+    @bot.command(name="mute")
     @commands.has_permissions(manage_roles=True)
     async def mute(self, ctx, member: disnake.Member, *, time: TimeConverter = None):
         """Mutes a member for the specified time- time in 2d 10h 3m 2s format ex:
@@ -137,7 +137,7 @@ class Moderation(commands.Cog):
             await asyncio.sleep(time)
             await member.remove_roles(role)
 
-    @commands.command(pass_context=True)
+    @bot.command(pass_context=True)
     @commands.has_any_role(853391228409085962)
     async def warn(self, ctx, member: disnake.Member, *, reason):
         if member.id in [ctx.author.id, self.bot.user.id]:
@@ -189,7 +189,7 @@ class Moderation(commands.Cog):
 
         await channel.send(embed=log)
 
-    @commands.command(name="warnings")
+    @bot.command(name="warnings")
     @commands.has_any_role(853391228409085962)
     async def warnings(self, ctx, member: disnake.Member):
 

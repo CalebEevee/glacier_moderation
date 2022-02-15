@@ -41,7 +41,7 @@ class Utilities(commands.Cog):
         )
 
         print(
-            f"\x1b[0;34m[CMD] {ctx.author}  {ctx.author.id} used the command\x1b[0;0m PING\x1b "
+            f"\x1b[0;34m[CMD] {ctx.author}  {ctx.author.id} used the command\x1b[0;0m PING"
         )
 
     @commands.command(name="setstatus")

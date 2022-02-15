@@ -9,18 +9,20 @@ class ErrorHandler(commands.Cog):
         self.bot = bot
 
     @commands.Cog.listener()
-    async def on_command_error(self, ctx, error):
-        """Global Error Handler"""
+    async def on_command_error(
+        self, ctx: commands.Context, error: commands.CommandError
+    ):
+        """A global error handler cog."""
         if isinstance(error, commands.CommandNotFound):
             return
         elif isinstance(error, commands.CommandOnCooldown):
-            message = f"This commands is on cooldown. Please try again after {round(error.retry_after, 1)} seconds."
+            message = f"This command is on cooldown. Please try again after {round(error.retry_after, 1)} seconds."
         elif isinstance(error, commands.MissingPermissions):
             message = "You are missing the required permissions to run this command!"
         elif isinstance(error, commands.UserInputError):
             message = "Something about your input was wrong, please check your input and try again!"
         else:
-            message = "Oh no! Something went wrong while running this command!"
+            message = "Oh no! Something went wrong while running the command!"
 
         eembed = disnake.Embed(
             title="Error!",

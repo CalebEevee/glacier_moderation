@@ -26,7 +26,7 @@ async def on_ready():
 
 @bot.check
 async def globally_block_dms(ctx):
-    if ctx.guild is not None and ctx.guild is 845454672755425362:
+    if ctx.guild is not None and ctx.guild == 845454672755425362:
         raise commands.NoPrivateMessage()
     return True
 

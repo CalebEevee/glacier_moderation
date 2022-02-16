@@ -8,7 +8,7 @@ from pastecord import create_document
 import checks
 import classes
 
-bot = commands.Bot()
+bot = commands.Bot(command_prefix="=")
 
 
 class Utilities(commands.Cog):
@@ -18,7 +18,7 @@ class Utilities(commands.Cog):
         self.bot = bot
         self.last_msg = None
 
-    @commands.command(name="ping")
+    @bot.command(name="ping")
     @commands.cooldown(rate=1, per=5, type=commands.BucketType.user)
     @commands.check(checks.LEVEL_W)
     async def ping(self, ctx: commands.Context):
@@ -44,7 +44,7 @@ class Utilities(commands.Cog):
             f"\x1b[0;34m[CMD] {ctx.author}  {ctx.author.id} used the command\x1b[0;0m PING"
         )
 
-    @commands.command(name="setstatus")
+    @bot.command(name="setstatus")
     @commands.cooldown(rate=1, per=5)
     @commands.has_role(847994265974997002)
     async def setstatus(self, ctx: commands.Context, *, text: str):
@@ -87,7 +87,7 @@ class Utilities(commands.Cog):
     async def on_message_delete(self, message: disnake.Message):
         self.last_msg = message
 
-    @commands.command(name="snipe")
+    @bot.command(name="snipe")
     @commands.check(checks.LEVEL_W)
     async def _snipe(self, ctx: commands.Context):
         """A command to snipe delete messages."""
@@ -147,12 +147,12 @@ class Utilities(commands.Cog):
     async def hello(self, ctx):
         await ctx.respond("Hi, this is a slash command from a cog!")
 
-    @commands.command(name="say")
+    @bot.command(name="say")
     async def _say(self, ctx: commands.Context, *, text: str):
         await ctx.send(message=text)
         await ctx.message.delete(delay=5)
 
-    @commands.command(name="embed")
+    @bot.command(name="embed")
     async def _embed(self, ctx: commands.Context, *, text: str):
         embed = disnake.Embed(
             color=0x56C9F0,
@@ -164,7 +164,7 @@ class Utilities(commands.Cog):
         await ctx.send(embed=embed)
         await ctx.message.delete(delay=5)
 
-    @commands.command(name="pastecord")
+    @bot.command(name="pastecord")
     async def _pastecord(self, ctx: commands.Context, *, text: str):
         document = create_document(text)
         embed = disnake.Embed(

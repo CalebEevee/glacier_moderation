@@ -22,6 +22,10 @@ load_dotenv()
 async def on_ready():
     print("\033[1;32m[STATUS] Logged in as {0.user}".format(bot))
     print("\033[1;32m[STATUS] Bot Ready! \u001b[0m\n")
+    await bot.change_presence(
+        activity=disnake.Game("Moderating Glacier Advertising"),
+        status="disnake.Status.online",
+    )
 
 
 @bot.check

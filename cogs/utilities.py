@@ -33,7 +33,7 @@ class Utilities(commands.Cog):
         ```
         """
         start_time = time.time()
-        message = await ctx.send("Testing Ping...")
+        message = await ctx.reply("Testing Ping...")
         end_time = time.time()
 
         await message.edit(
@@ -41,7 +41,7 @@ class Utilities(commands.Cog):
         )
 
         print(
-            f"\x1b[0;34m[CMD] {ctx.author}  {ctx.author.id} used the command\x1b[0;0m PING"
+            f"\x1b[0;34m[CMD] {ctx.author}  {ctx.author.id} used the command\x1b[0;0m {ctx.command.qualified_name.upper()}"
         )
 
     @bot.command(name="setstatus")

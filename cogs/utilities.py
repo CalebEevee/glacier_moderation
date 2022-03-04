@@ -18,6 +18,12 @@ class Utilities(commands.Cog):
         self.bot = bot
         self.last_msg = None
 
+    @bot.command(name="exit")
+    @commands.check(checks.LEVEL_A)
+    async def exit(self, ctx: commands.Context):
+        await ctx.reply("Signing Out...")
+        exit()
+
     @bot.command(name="ping")
     @commands.cooldown(rate=1, per=5, type=commands.BucketType.user)
     @commands.check(checks.LEVEL_W)
@@ -144,8 +150,8 @@ class Utilities(commands.Cog):
         name="hello",
         description="UTILITIES - Testing for slash commands",
     )  # Create a slash command for the supplied guilds.
-    async def hello(self, ctx):
-        await ctx.respond("Hi, this is a slash command from a cog!")
+    async def hello(self, inter: disnake.ApplicationCommandInteraction):
+        await inter.response.send_message("Hi, this is a slash command from a cog!")
 
     @bot.command(name="say")
     async def _say(self, ctx: commands.Context, *, text: str):
